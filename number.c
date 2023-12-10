@@ -39,13 +39,13 @@ Number get_number(const char *number_string) {
     return number;
 }
 
-Status insert_at_last(const char digit, Number_Unsigned **head, Number_Unsigned **tail) {
+Status insert_at_last(const char digit, Digit_Node **head, Digit_Node **tail) {
 
     //design time verification.
     assert(head && tail);
 
     //get memory for a new digit.
-    Number_Unsigned *new = get_memory(sizeof(*new));
+    Digit_Node *new = get_memory(sizeof(*new));
 
     //if allocation fails.
     if(!new)
@@ -88,7 +88,7 @@ void print_number(const Number *const number) {
     assert(number);
 
     //get a traverser for digits.
-    Number_Unsigned *trav = number->head;
+    Digit_Node *trav = number->head;
 
     //print the sign
     if(number->sign == '-')
