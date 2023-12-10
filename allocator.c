@@ -1,7 +1,10 @@
 #include "allocator.h"
 #include <assert.h>
 
+//memory tracker list head.
 static Alloc_Mem_List *head = NULL;
+
+//lock for the allocate_memory() function.
 static int lock = 1;
 
 void *get_memory(const size_t n_bytes) {
