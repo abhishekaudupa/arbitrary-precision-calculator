@@ -6,4 +6,9 @@ typedef enum _Status {
     s_success
 } Status;
 
+typedef enum _Bool_t {
+    b_false,
+    b_true
+} Bool_t;
+
 #endif
