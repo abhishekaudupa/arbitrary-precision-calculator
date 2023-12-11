@@ -22,6 +22,10 @@ Number get_number(const char *number_string) {
 	++i;
     }
 
+    //discard preceding zeroes, if any.
+    while(number_string[i] == '0')
+	++i;
+
     //check if the number string starts with a dot.
     if(number_string[i] == '.') {
 	//number now starts with a zero.
