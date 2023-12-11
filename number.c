@@ -1,11 +1,11 @@
 #include "number.h"
 #include "argument.h"
 #include "allocator.h"
-#include <assert.h>
 #include <string.h>
+#include <assert.h>
 #include <stdio.h>
 
-Number get_number(const char *number_string) {
+Number get_number(const char *const number_string) {
 
     //design time verification.
     assert(number_string);
@@ -34,11 +34,13 @@ Number get_number(const char *number_string) {
 
     //traverse the number string.
     while(number_string[i]) {
-
 	//insert the digit at the last node.
 	insert_at_last(number_string[i], &(number.head), &(number.tail));
 	++i;
     }
+
+    //assign place values to digits.
+    assign_place_value(&number);
 
     return number;
 }
@@ -112,4 +114,131 @@ void print_number(const Number *const number) {
 	//increment traverser.
 	trav = trav->next;
     }
+}
+
+void assign_place_value(const Number *const number) {
+
+    //design time check.
+    assert(number);
+
+    //get a traverser.
+    Digit_Node *trav = number->head;
+
+    //traverse till decimal point/end.
+    while(trav->next) {
+
+	//detect decimal point.
+	if(trav->digit == '.') {
+	    //set the dot's place as zero.
+	    trav->distance_from_dot = 0;
+
+	    //get another traverser.
+	    Digit_Node *trav_n = trav->next;
+
+	    //decrement current traverser.
+	    trav = trav->prev;
+
+	    //set place values before dot.
+	    while(trav) {
+
+		//set place value.
+		trav->distance_from_dot = trav->next->distance_from_dot - 1;
+
+		//decrement traverser.
+		trav = trav->prev;
+	    }
+	    
+	    //set place values after dot.
+	    while(trav_n) {
+
+		//set place value.
+		trav_n->distance_from_dot = trav_n->prev->distance_from_dot + 1;
+
+		//decrement traverser.
+		trav_n = trav_n->next;
+	    }
+
+	    return;
+	}
+
+	//increment traverser.
+	trav = trav->next;
+    }
+
+    //we're here: decimal point not found.
+
+    //set place values.
+    trav->distance_from_dot = -1;
+
+    //decrement traverser.
+    trav = trav->prev;
+
+    //traverse to beginning.
+    while(trav) {
+
+	//set place value.
+	trav->distance_from_dot = trav->next->distance_from_dot - 1;
+
+	//decrement traverser.
+	trav = trav->prev;
+    }
+}
+
+Bool_t abs_greater_than(const Number *const num1, const Number *const num2) {
+
+    //design time check.
+    assert(num1 && num2);
+
+    //check place value of most sig. digit.
+    if(num1->head->distance_from_dot < num2->head->distance_from_dot) {
+	//num1 is greater.
+	return b_true;
+    }
+
+    if(num1->head->distance_from_dot > num2->head->distance_from_dot) {
+	//num2 is greater.
+	return b_false;
+    }
+
+    //both numbers are of same order of magnitude. Go below.
+
+    //get traversers to traverse digits
+    Digit_Node *trav1 = num1->head;
+    Digit_Node *trav2 = num2->head;
+
+    //compare digit by digit.
+    while(trav1 && trav2) {
+
+	//compare digits
+	if(trav1->digit > trav2->digit) {
+	    //num1 is greater.
+	    return b_true;
+	}
+
+	if(trav1->digit < trav2->digit) {
+	    //num2 is greater.
+	    return b_false;
+	}
+
+	//increment traversers.
+	trav1 = trav1->next;
+	trav2 = trav2->next;
+    }
+
+    //compare leftover digits on num1.
+    while(trav1) {
+	//check if digit is not zero.
+	if(trav1->digit != '.') {
+	    if(trav1->digit) {
+		//num1 is greater.
+		return b_true;
+	    }
+	}
+
+	//increment traverser.
+	trav1 = trav1->next;
+    }
+
+    //num1 is not greater.
+    return b_false;
 }
