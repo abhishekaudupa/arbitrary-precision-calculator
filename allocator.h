@@ -16,7 +16,7 @@ void *get_memory(const size_t n_bytes);
     
 void *allocate_memory(const size_t n_bytes);
     
-Status insert_at_first(void *mem);
+Status track_mem(void *mem);
     
 void release_memory();
 

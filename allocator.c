@@ -23,7 +23,7 @@ void *get_memory(const size_t n_bytes) {
 
     //track the allocation, if allocation succeeded.
     if(mem_ptr)
-	insert_at_first(mem_ptr);
+	track_mem(mem_ptr);
 
     return mem_ptr;
 }
@@ -49,7 +49,7 @@ void *allocate_memory(const size_t n_bytes) {
     return mem_ptr;
 }
 
-Status insert_at_first(void *mem) {
+Status track_mem(void *mem) {
     
     //design time check.
     assert(mem);
