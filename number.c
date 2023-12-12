@@ -26,6 +26,10 @@ Number get_number(const char *const number_string) {
     while(number_string[i] == '0')
 	++i;
 
+    //if the input was a zero
+    if(!number_string[i])
+	--i;
+
     //check if the number string starts with a dot.
     if(number_string[i] == '.') {
 	//number now starts with a zero.
@@ -241,4 +245,38 @@ Bool_t abs_greater_than(const Number *const num1, const Number *const num2) {
 
     //num1 is not greater.
     return b_false;
+}
+
+Status insert_at_first(const char digit, Digit_Node **head) {
+
+    //design time verification.
+    assert(head);
+
+    //list shouldn't be empty.
+    assert(*head);
+
+    //data should not be decimal dot.
+    assert(digit != '.');
+
+    //get memory for a new digit.
+    Digit_Node *new = get_memory(sizeof(*new));
+
+    //if allocation fails.
+    if(!new)
+	return s_failure;
+
+    //set the digit
+    new->digit = digit - '0';
+
+    //set new's links.
+    new->next = *head;
+    new->prev = NULL;
+
+    //set new before head.
+    (*head)->prev = new;
+
+    //decrement head.
+    *head = new;
+
+    return s_success;
 }
