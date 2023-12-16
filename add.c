@@ -7,7 +7,7 @@ Number *add(Number *const operand1, Number *const operand2) {
     //design time check
     assert(operand1 && operand2);
 
-    //get traversers to both numbers. We'll return trav2.
+    //get traversers to both numbers.
     Digit_Node *trav1 = NULL;
     Digit_Node *trav2 = NULL;
 
@@ -21,8 +21,7 @@ Number *add(Number *const operand1, Number *const operand2) {
 	trav2 = operand2->tail;
 	to_ret = operand2;
     } else {		//otherwise
-	//set trav2 to the number which has the farthest
-	//digit from decimal dot.
+	//set trav2 to the number which has the farthest digit from decimal dot.
 	if(operand1->tail->distance_from_dot > operand2->tail->distance_from_dot) {
 	    trav2 = operand1->tail;
 	    trav1 = operand2->tail;
