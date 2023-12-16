@@ -19,3 +19,4 @@ add.o : add.c add.h
 clean :
 	rm *.o apcalc
 	clear
+	ls
