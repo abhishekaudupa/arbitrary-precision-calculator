@@ -5,16 +5,7 @@
 #include "add.h"
 #include "subtract.h"
 
-#ifndef NDEBUG
-void run_tests() {
-    test_arguments_c();
-}
-#endif
-
 int main(int argc, char **argv) {
-#ifndef NDEBUG
-    run_tests();
-#endif
 
     //validate input arithmetic CL arguments.
     if(validate_arguments(argc, argv) == s_failure) {
