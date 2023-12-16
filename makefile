@@ -4,7 +4,7 @@ apcalc : argument.o driver.o allocator.o number.o add.o
 argument.o : argument.c argument.h common.h
 	gcc -Wall -c argument.c -o argument.o
 
-driver.o : driver.c common.h
+driver.o : driver.c argument.h number.h allocator.h add.h
 	gcc -Wall -c driver.c -o driver.o
 
 allocator.o : allocator.c allocator.h common.h
