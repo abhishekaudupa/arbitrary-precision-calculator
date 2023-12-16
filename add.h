@@ -1,5 +1,5 @@
-#ifndef OPERATION_H
-#define OPERATION_H
+#ifndef ADD_H
+#define ADD_H
 
 #include "number.h"
 
