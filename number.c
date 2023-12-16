@@ -53,6 +53,7 @@ Status insert_at_last(const char digit, Digit_Node **head, Digit_Node **tail) {
 
     //design time verification.
     assert(head && tail);
+    assert((digit >= '0' && digit <= '9') || digit == '.');
 
     //get memory for a new digit.
     Digit_Node *new = get_memory(sizeof(*new));
@@ -280,6 +281,7 @@ Status insert_at_first(const char digit, Digit_Node **head) {
 
     //design time verification.
     assert(head);
+    assert((digit >= '0' && digit <= '9') || digit == '.');
 
     //list shouldn't be empty.
     assert(*head);
