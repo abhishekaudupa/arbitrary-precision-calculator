@@ -92,7 +92,8 @@ Status validate_operator(const char *const operator_string) {
     //check if string is a valid arithmetic operator.
     return operator_string[0] == '+'
 	|| operator_string[0] == '-'
-	|| operator_string[0] == '*'
+	|| operator_string[0] == 'x'
+	|| operator_string[0] == 'X'
 	|| operator_string[0] == '/';
 }
 
