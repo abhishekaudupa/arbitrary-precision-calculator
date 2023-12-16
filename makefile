@@ -1,5 +1,5 @@
-apcalc : argument.o driver.o allocator.o number.o operation.o
-	gcc -Wall argument.o driver.o allocator.o number.o operation.o -o apcalc
+apcalc : argument.o driver.o allocator.o number.o add.o
+	gcc -Wall argument.o driver.o allocator.o number.o add.o -o apcalc
 
 argument.o : argument.c argument.h common.h
 	gcc -Wall -c argument.c -o argument.o
@@ -13,8 +13,8 @@ allocator.o : allocator.c allocator.h common.h
 number.o : number.c number.h common.h
 	gcc -Wall -c number.c -o number.o
 
-operation.o : operation.c operation.h
-	gcc -Wall -c operation.c -o operation.o
+add.o : add.c add.h
+	gcc -Wall -c add.c -o add.o
 
 clean :
 	rm *.o apcalc
