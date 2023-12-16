@@ -104,6 +104,35 @@ void print_number(const Number *const number) {
     if(number->sign == '-')
 	fprintf(stdout, "%c", number->sign);
 
+    //ignore preceding zeroes.
+    while(trav) {
+
+	//check if digit is zero.
+	if(trav->digit == 0) {
+	    //check if next digit is a decimal dot.
+	    if(trav->next) {
+		if(trav->next->digit == '.') {
+		    //print zero
+		    fprintf(stdout, "%hhu", trav->digit);
+
+		    //incr. traverser.
+		    trav = trav->next;
+
+		    break;
+		}
+	    } else {
+		//the number is zero.
+		fprintf(stdout, "%hhu", trav->digit);
+	    }
+	} else {
+	    //break if digit not zero.
+	    break;
+	}
+
+	//increment traverser.
+	trav = trav->next;
+    }
+
     //traverse list and print digits.
     while(trav) {
 
@@ -151,7 +180,7 @@ void assign_place_value(const Number *const number) {
 		//decrement traverser.
 		trav = trav->prev;
 	    }
-	    
+
 	    //set place values after dot.
 	    while(trav_n) {
 
