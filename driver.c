@@ -3,6 +3,7 @@
 #include "number.h"
 #include "allocator.h"
 #include "add.h"
+#include "subtract.h"
 
 #ifndef NDEBUG
 void run_tests() {
@@ -32,8 +33,8 @@ int main(int argc, char **argv) {
     print_number(&num2);
     printf("\n");
 
-    Number *sum = add(&num1, &num2);
-    printf("Sum: ");
+    Number *sum = subtract(&num1, &num2);
+    printf("Difference: ");
     print_number(sum);
     printf("\n");
 

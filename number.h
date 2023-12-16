@@ -22,7 +22,7 @@ Number get_number(const char *const number_string);
 
 Status insert_at_last(const char digit, Digit_Node **head, Digit_Node **tail);
 
-void print_number(const Number *number);
+void print_number(const Number *const number);
 
 void assign_place_value(const Number *const number);
 
