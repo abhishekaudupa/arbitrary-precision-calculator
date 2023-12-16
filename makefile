@@ -1,5 +1,5 @@
-apcalc : argument.o driver.o allocator.o number.o add.o
-	gcc -Wall argument.o driver.o allocator.o number.o add.o -o apcalc
+apcalc : argument.o driver.o allocator.o number.o add.o subtract.o
+	gcc -Wall argument.o driver.o allocator.o number.o add.o subtract.o -o apcalc
 
 argument.o : argument.c argument.h common.h
 	gcc -Wall -c argument.c -o argument.o
@@ -15,6 +15,9 @@ number.o : number.c number.h common.h
 
 add.o : add.c add.h
 	gcc -Wall -c add.c -o add.o
+
+subtract.o : subtract.c subtract.h
+	gcc -Wall -c subtract.c -o subtract.o
 
 clean :
 	rm *.o apcalc
