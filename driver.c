@@ -5,6 +5,7 @@
 #include "add.h"
 #include "subtract.h"
 #include "operation.h"
+#include "multiply.h"
 
 int main(int argc, char **argv) {
 
@@ -16,15 +17,14 @@ int main(int argc, char **argv) {
 
     //get numbers from arguments.
     Number num1 = get_number(argv[1]);
-    Number num2 = get_number(argv[3]);
-    char operator = argv[2][0];
+    //Number num2 = get_number(argv[3]);
+    //char operator = argv[2][0];
+
+    int n;
+    scanf("%d", &n);
+    modify_order_of_magnitude(&num1, n);
 
     print_number(&num1);
-    printf(" %c ", operator);
-    print_number(&num2);
-    printf(" = ");
-    Number *result = resolve(&num1, &num2, operator);
-    print_number(result);
     printf("\n");
 
     release_memory();

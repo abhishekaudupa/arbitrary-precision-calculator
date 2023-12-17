@@ -284,9 +284,6 @@ Status insert_at_first(const char digit, Number *const number) {
     assert(number);
     assert((digit >= '0' && digit <= '9') || digit == '.');
 
-    //data should not be decimal dot.
-    assert(digit != '.');
-
     //get memory for a new digit.
     Digit_Node *new = get_memory(sizeof(*new));
 
@@ -295,7 +292,7 @@ Status insert_at_first(const char digit, Number *const number) {
 	return s_failure;
 
     //set the digit
-    new->digit = digit - '0';
+    new->digit = (digit == '.')? digit: digit - '0';
 
     //set new's links.
     new->next = number->head;
@@ -328,4 +325,114 @@ unsigned int get_digit_count(const Number *const number) {
 	
     //return digit count for number without decimal dot.
     return number->tail->distance_from_dot - number->head->distance_from_dot + 1;
+}
+
+/* Function to multiply or divide by 10 aka change of magnitude */
+Status modify_order_of_magnitude(Number *const number, int magnitude_delta) {
+    //design time check.
+    assert(number);
+    assert(number->head);
+    assert(number->tail);
+    
+    //no change in number's magnitude.
+    if(!magnitude_delta)
+	return s_success;
+
+    //if number has no decimal dot.
+    if(number->tail->distance_from_dot < 0) {
+	
+	//check if change is positive (multiplying).
+	if(magnitude_delta > 0) {
+	    //append zeroes.
+	    for(int i = 0; i < magnitude_delta; ++i)
+		insert_at_last('0', number);
+	    return s_success;
+	} else {	//dividing.
+
+	    //if we have to shift the dot beyond the msd.
+	    if(magnitude_delta <= number->head->distance_from_dot) {
+		
+		//prepend requisite number of zeroes after decimal dot and before MSD.
+		int zeroes_to_prepend = -magnitude_delta + number->head->distance_from_dot;
+		for(int i = 0; i < zeroes_to_prepend; ++i) {
+		    insert_at_first('0', number);
+		}
+
+		//prepend a '0.'
+		insert_at_first('.', number);
+		insert_at_first('0', number);
+		return s_success;
+	    }
+
+	    //otherwise.
+
+	    //traverse steps back from tail.
+	    Digit_Node *trav = number->tail;
+	    for(int i = 0; i < -magnitude_delta; ++i)
+		trav = trav->prev;
+
+	    //insert a decimal dot after trav.
+	    return insert_after('.', trav);
+	}
+    }
+
+    //number has a decimal dot.
+
+    //get a traverser.
+    Digit_Node *trav = number->head;
+
+    //traverse to dot.
+    while(trav) {
+	if(trav->digit == '.')
+	    break;
+	trav = trav->next;
+    }
+
+    //multiply
+    if(magnitude_delta > 0) {
+
+	//shfit dot right
+	for(int i = 0; i < magnitude_delta; ++i) {
+	    trav->digit = trav->next->digit;
+	    trav->next->digit = '.';
+	    if(!(trav->next->next))
+		insert_at_last('0', number);
+	    trav = trav->next;
+	}
+    } else {	//divide
+
+	//shift dot left.
+	for(int i = 0; i < -magnitude_delta; ++i) {
+	    trav->digit = trav->prev->digit;
+	    trav->prev->digit = '.';
+	    if(!(trav->prev->prev))
+		insert_at_first('0', number);
+	    trav = trav->prev;
+	}
+    }
+
+    return s_success;
+}
+
+Status insert_after(const char digit_to_insert, Digit_Node *const digit) {
+    //design time check.
+    assert(digit);
+    assert(digit_to_insert == '.');
+
+    //allocate memory.
+    Digit_Node *new_dot = get_memory(sizeof(*new_dot));
+
+    if(!new_dot)
+	return s_failure;
+
+    //set data
+    new_dot->digit = digit_to_insert;
+
+    //set new's next.
+    new_dot->next = digit->next;
+
+    //relink digit.
+    digit->next = new_dot;
+
+    return s_success;
 }

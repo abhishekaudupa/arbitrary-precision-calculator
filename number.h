@@ -32,4 +32,8 @@ Status insert_at_first(const char digit, Number *const number);
 
 unsigned int get_digit_count(const Number *const number);
 
+Status modify_order_of_magnitude(Number *const number, int magnitude_delta);
+
+Status insert_after(const char digit_to_insert, Digit_Node *const digit);
+
 #endif
