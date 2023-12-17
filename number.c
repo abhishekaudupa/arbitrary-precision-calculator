@@ -312,3 +312,15 @@ Status insert_at_first(const char digit, Digit_Node **head) {
 
     return s_success;
 }
+
+unsigned int get_digit_count(const Number *const number) {
+    //design time check.
+    assert(number);
+
+    //return digit count for number with decimal dot.
+    if(number->tail->distance_from_dot > 0)
+	return number->tail->distance_from_dot - number->head->distance_from_dot;
+	
+    //return digit count for number without decimal dot.
+    return number->tail->distance_from_dot - number->head->distance_from_dot + 1;
+}

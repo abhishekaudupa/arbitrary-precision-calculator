@@ -30,4 +30,6 @@ Bool_t abs_greater_than(const Number *const num1, const Number *const num2);
 
 Status insert_at_first(const char digit, Digit_Node **head);
 
+unsigned int get_digit_count(const Number *const number);
+
 #endif
