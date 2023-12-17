@@ -218,6 +218,7 @@ void assign_place_value(const Number *const number) {
     }
 }
 
+/* Function to check if num1 > num2 */
 Bool_t abs_greater_than(const Number *const num1, const Number *const num2) {
 
     //design time check.
