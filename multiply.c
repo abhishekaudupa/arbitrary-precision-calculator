@@ -32,7 +32,7 @@ Number multiply(Number *const operand1, Number *const operand2) {
     //to track carry.
     unsigned char carry = 0;
 
-    //traverser start position for product's digits (decreemnted each iteration).
+    //traverser start position for product's digits (decremnted each iteration).
     Digit_Node **trav3 = &(product.tail);
 
     //traverse each of trav2 digits.
@@ -58,7 +58,7 @@ Number multiply(Number *const operand1, Number *const operand2) {
 		trav1_r = trav1_r->prev;
 		continue;
 	    }
-	    
+
 	    //calculate digit.
 	    unsigned char digit_prod = (trav2->digit) * (trav1_r->digit) + carry;
 
@@ -102,6 +102,26 @@ Number multiply(Number *const operand1, Number *const operand2) {
 	//shift trav3 left.
 	trav3 = &((*trav3)->prev);
     }
+
+    //assign place values to digits of product.
+    assign_place_value(&product);
+
+    /* we need to check if the operand/s were fractions and divide
+       the product accordingly */
+
+    //10's power by which to change the magnitude.
+    int magnitude_delta = 0;
+
+    //if operand1 is a fraction.
+    if(operand1->tail->distance_from_dot > 0)
+	magnitude_delta += operand1->tail->distance_from_dot;
+
+    //if operand2 is a fraction.
+    if(operand2->tail->distance_from_dot > 0)
+	magnitude_delta += operand2->tail->distance_from_dot;
+
+    //reduce order of magnitude of product.
+    modify_order_of_magnitude(&product, -magnitude_delta);
 
     return product;
 }
