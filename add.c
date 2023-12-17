@@ -106,7 +106,7 @@ Number *add(Number *const operand1, Number *const operand2) {
 	}
 
 	//insert the digit as MSD of trav2.
-	insert_at_first(sum + '0', &(to_ret->head));
+	insert_at_first(sum + '0', to_ret);
 
 	//decrement traversers.
 	trav1 = trav1->prev;
@@ -114,7 +114,7 @@ Number *add(Number *const operand1, Number *const operand2) {
 
     //if there's a carry, add it.
     if(carry)
-	insert_at_first(carry + '0', &(to_ret->head));
+	insert_at_first(carry + '0', to_ret);
 
     return to_ret;
 }

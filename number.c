@@ -33,13 +33,13 @@ Number get_number(const char *const number_string) {
     //check if the number string starts with a dot.
     if(number_string[i] == '.') {
 	//number now starts with a zero.
-	insert_at_last('0', &(number.head), &(number.tail));
+	insert_at_last('0', &number);
     }
 
     //traverse the number string.
     while(number_string[i]) {
 	//insert the digit at the last node.
-	insert_at_last(number_string[i], &(number.head), &(number.tail));
+	insert_at_last(number_string[i], &number);
 	++i;
     }
 
@@ -49,10 +49,10 @@ Number get_number(const char *const number_string) {
     return number;
 }
 
-Status insert_at_last(const char digit, Digit_Node **head, Digit_Node **tail) {
+Status insert_at_last(const char digit, Number *const number) {
 
     //design time verification.
-    assert(head && tail);
+    assert(number);
     assert((digit >= '0' && digit <= '9') || digit == '.');
 
     //get memory for a new digit.
@@ -66,10 +66,10 @@ Status insert_at_last(const char digit, Digit_Node **head, Digit_Node **tail) {
     new->digit = (digit == '.')? digit: digit - '0';
 
     //check if the list is empty
-    if(!*head) {
+    if(!(number->head)) {
 
 	//set head and tail.
-	*head = *tail = new;
+	number->head = number->tail = new;
 
 	//set links
 	new->prev = NULL;
@@ -81,14 +81,14 @@ Status insert_at_last(const char digit, Digit_Node **head, Digit_Node **tail) {
     //if list isn't empty, go below.
 
     //set new after tail.
-    (*tail)->next = new;
+    number->tail->next = new;
 
     //set new's links.
     new->next = NULL;
-    new->prev = *tail;
+    new->prev = number->tail;
 
     //increment tail.
-    *tail = new;
+    number->tail = new;
 
     return s_success;
 }
@@ -278,14 +278,11 @@ Bool_t abs_greater_than(const Number *const num1, const Number *const num2) {
     return b_false;
 }
 
-Status insert_at_first(const char digit, Digit_Node **head) {
+Status insert_at_first(const char digit, Number *const number) {
 
     //design time verification.
-    assert(head);
+    assert(number);
     assert((digit >= '0' && digit <= '9') || digit == '.');
-
-    //list shouldn't be empty.
-    assert(*head);
 
     //data should not be decimal dot.
     assert(digit != '.');
@@ -301,14 +298,22 @@ Status insert_at_first(const char digit, Digit_Node **head) {
     new->digit = digit - '0';
 
     //set new's links.
-    new->next = *head;
+    new->next = number->head;
     new->prev = NULL;
 
+    //check if number is empty.
+    if(!(number->head)) {
+	number->head = number->tail = new;
+	return s_success;
+    }
+
+    //continue otherwise.
+
     //set new before head.
-    (*head)->prev = new;
+    (number->head)->prev = new;
 
     //decrement head.
-    *head = new;
+    number->head = new;
 
     return s_success;
 }

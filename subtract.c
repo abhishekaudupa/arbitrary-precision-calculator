@@ -17,8 +17,8 @@ Number *subtract(Number *const operand1, Number *const operand2) {
     //see if operand1 needs a decimal dot.
     if(trav1->distance_from_dot < 0 && trav2->distance_from_dot > 0) {
 	//append '.0' to operand1
-	insert_at_last('.', &(operand1->head), &(operand1->tail));
-	insert_at_last('0', &(operand1->head), &(operand1->tail));
+	insert_at_last('.', operand1);
+	insert_at_last('0', operand1);
 
 	//reassign place values.
 	assign_place_value(operand1);
@@ -36,7 +36,7 @@ Number *subtract(Number *const operand1, Number *const operand2) {
 
 	//append requisite zeroes to operand1.
 	for(int i = 0; i < (trav2->distance_from_dot - trav1->distance_from_dot); ++i)
-	    insert_at_last('0', &(operand1->head), &(operand1->tail));
+	    insert_at_last('0', operand1);
 
 	//reset trav1.
 	trav1 = operand1->tail;

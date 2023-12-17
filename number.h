@@ -20,7 +20,7 @@ typedef struct _Number {
 
 Number get_number(const char *const number_string);
 
-Status insert_at_last(const char digit, Digit_Node **head, Digit_Node **tail);
+Status insert_at_last(const char digit, Number *const number);
 
 void print_number(const Number *const number);
 
@@ -28,7 +28,7 @@ void assign_place_value(const Number *const number);
 
 Bool_t abs_greater_than(const Number *const num1, const Number *const num2);
 
-Status insert_at_first(const char digit, Digit_Node **head);
+Status insert_at_first(const char digit, Number *const number);
 
 unsigned int get_digit_count(const Number *const number);
 
