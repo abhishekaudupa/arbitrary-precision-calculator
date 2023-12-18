@@ -13,6 +13,9 @@ Number get_number(const char *const number_string) {
     //get a string traverser variable.
     size_t i = 0;
 
+    //get a string limit index variable.
+    size_t j = strlen(number_string) - 1;
+
     //return variable.
     Number number = { NULL, NULL, '+' };
 
@@ -22,22 +25,32 @@ Number get_number(const char *const number_string) {
 	++i;
     }
 
-    //discard preceding zeroes, if any.
-    while(number_string[i] == '0')
-	++i;
-
-    //if the input was a zero
-    if(!number_string[i])
-	--i;
-
-    //check if the number string starts with a dot.
-    if(number_string[i] == '.') {
-	//number now starts with a zero.
-	insert_at_last('0', &number);
+    while(i < j) {
+	//discard preceding zeroes.
+	if(number_string[i] == '0') {
+	    ++i;
+	    continue;
+	}
+	
+	//if you encounter a decimal dot.
+	if(number_string[i] == '.') {
+	    --i;
+	    //discard trailing zeroes.
+	    while(j > i) {
+		if(number_string[j] == '0' || number_string[j] == '.')
+		    --j;
+		else
+		    break;
+	    }
+	    break;
+	} else {
+	    //stop otherwise.
+	    break;
+	}
     }
 
     //traverse the number string.
-    while(number_string[i]) {
+    while(i <= j) {
 	//insert the digit at the last node.
 	insert_at_last(number_string[i], &number);
 	++i;
@@ -322,7 +335,7 @@ unsigned int get_digit_count(const Number *const number) {
     //return digit count for number with decimal dot.
     if(number->tail->distance_from_dot > 0)
 	return number->tail->distance_from_dot - number->head->distance_from_dot;
-	
+
     //return digit count for number without decimal dot.
     return number->tail->distance_from_dot - number->head->distance_from_dot + 1;
 }
@@ -333,14 +346,14 @@ Status modify_order_of_magnitude(Number *const number, int magnitude_delta) {
     assert(number);
     assert(number->head);
     assert(number->tail);
-    
+
     //no change in number's magnitude.
     if(!magnitude_delta)
 	return s_success;
 
     //if number has no decimal dot.
     if(number->tail->distance_from_dot < 0) {
-	
+
 	//check if change is positive (multiplying).
 	if(magnitude_delta > 0) {
 	    //append zeroes.
@@ -351,7 +364,7 @@ Status modify_order_of_magnitude(Number *const number, int magnitude_delta) {
 
 	    //if we have to shift the dot beyond the msd.
 	    if(magnitude_delta <= number->head->distance_from_dot) {
-		
+
 		//prepend requisite number of zeroes after decimal dot and before MSD.
 		int zeroes_to_prepend = -magnitude_delta + number->head->distance_from_dot;
 		for(int i = 0; i < zeroes_to_prepend; ++i) {
