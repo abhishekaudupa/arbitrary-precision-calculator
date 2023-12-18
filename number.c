@@ -436,3 +436,30 @@ Status insert_after(const char digit_to_insert, Digit_Node *const digit) {
 
     return s_success;
 }
+
+Bool_t is_zero(const Number *const number) {
+    //design time check.
+    assert(number);
+
+    //get a traverser.
+    Digit_Node *trav = number->head;
+
+    //traverse
+    while(trav) {
+	//skip dot.
+	if(trav->digit == '.') {
+	    //goto next digit.
+	    trav = trav->next;
+	    continue;
+	}
+
+	//check digit.
+	if(trav->digit)
+	    return b_false;
+
+	//goto next digit.
+	trav = trav->next;
+    }
+
+    return b_true;
+}

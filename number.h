@@ -36,4 +36,6 @@ Status modify_order_of_magnitude(Number *const number, int magnitude_delta);
 
 Status insert_after(const char digit_to_insert, Digit_Node *const digit);
 
+Bool_t is_zero(const Number *const number);
+
 #endif
