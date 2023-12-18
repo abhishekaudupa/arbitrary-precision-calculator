@@ -43,6 +43,12 @@ Status validate_operand(const char *const operand_string) {
     //get the string length.
     size_t operand_string_length = strlen(operand_string);
 
+    //check if it's a single digit.
+    if(operand_string_length == 1) {
+	if(!is_digit(operand_string[0]))
+	    return s_failure;
+    }
+
     //decimal point presence flag.
     char decimal_point = 0;
 
