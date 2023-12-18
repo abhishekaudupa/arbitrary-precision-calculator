@@ -25,8 +25,9 @@ Number get_number(const char *const number_string) {
 	++i;
     }
 
+    //disregard redundant zeroes in operand.
     while(i < j) {
-	//discard preceding zeroes.
+	//disregard preceding zeroes.
 	if(number_string[i] == '0') {
 	    ++i;
 	    continue;
@@ -34,14 +35,19 @@ Number get_number(const char *const number_string) {
 	
 	//if you encounter a decimal dot.
 	if(number_string[i] == '.') {
-	    --i;
-	    //discard trailing zeroes.
+	    
+	    //number is less than 1 in magnitude.
+	    insert_at_last('0', &number);
+
+	    //disregard redudant zeroes, if any, after dot.
 	    while(j > i) {
 		if(number_string[j] == '0' || number_string[j] == '.')
 		    --j;
 		else
 		    break;
 	    }
+
+	    //exit loop.
 	    break;
 	} else {
 	    //stop otherwise.
@@ -475,4 +481,37 @@ Bool_t is_zero(const Number *const number) {
     }
 
     return b_true;
+}
+
+/* Function to convert fractional numbers to whole
+   ending with a '.0'
+
+   returns the factor (power of ten) by which the
+   number was multiplied to make it whole.
+ */
+int make_whole(Number *const number) {
+    //design time check.
+    assert(number);
+
+    //the multiplying factor (power of ten).
+    int factor = number->tail->distance_from_dot;
+
+    //no decimal dot in number.
+    if(factor < 0) {
+	//append '.0'
+	insert_at_last('.', number);
+	insert_at_last('0', number);
+	assign_place_value(number);
+
+	//multiplied by 10^0.
+	return 0;
+    }
+
+    //we're here: there's a decimal dot. Go below.
+
+    //multiply by powers of ten.
+    modify_order_of_magnitude(number, factor);
+    assign_place_value(number);
+
+    return factor;
 }

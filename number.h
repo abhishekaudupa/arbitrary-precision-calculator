@@ -38,4 +38,6 @@ Status insert_after(const char digit_to_insert, Digit_Node *const digit);
 
 Bool_t is_zero(const Number *const number);
 
+int make_whole(Number *const number);
+
 #endif
