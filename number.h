@@ -40,4 +40,6 @@ Bool_t is_zero(const Number *const number);
 
 int make_whole(Number *const number);
 
+void sanitize(Number *const number);
+
 #endif

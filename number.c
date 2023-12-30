@@ -515,3 +515,41 @@ int make_whole(Number *const number) {
 
     return factor;
 }
+
+/*
+   Function to remove redundant zeroes in a number.
+ */
+void sanitize(Number *const number) {
+    //design time check.
+    assert(number);
+
+    //check digits after decimal point.
+    while(number->tail->distance_from_dot > 1) {
+
+	//if the last digit is zero.
+	if(number->tail->digit == 0) {
+	    //shift tail left.
+	    number->tail = number->tail->prev;
+
+	    //de-link tail
+	    number->tail->next = NULL;
+	} else {
+	    break;
+	}
+    }
+
+    //check digits before decimal point.
+    while(number->head->distance_from_dot < -1) {
+
+	//if the first digit is zero.
+	if(number->head->digit == 0) {
+	    //shift head right
+	    number->head = number->head->next;
+
+	    //de-link head.
+	    number->head->prev = NULL;
+	} else {
+	    break;
+	}
+    }
+}
