@@ -97,5 +97,8 @@ Number *subtract(Number *const operand1, Number *const operand2) {
 	trav2 = trav2->prev;
     }
 
+    //remove redundant zeros in operand 1.
+    sanitize(operand1);
+
     return operand1;
 }

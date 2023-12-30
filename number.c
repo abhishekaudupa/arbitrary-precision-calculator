@@ -362,10 +362,16 @@ Status modify_order_of_magnitude(Number *const number, int magnitude_delta) {
 
 	//check if change is positive (multiplying).
 	if(magnitude_delta > 0) {
+	    
 	    //append zeroes.
 	    for(int i = 0; i < magnitude_delta; ++i)
 		insert_at_last('0', number);
+
+	    //update place values of digits.
+	    assign_place_value(number);
+
 	    return s_success;
+
 	} else {	//dividing.
 
 	    //if we have to shift the dot beyond the msd.
@@ -380,6 +386,10 @@ Status modify_order_of_magnitude(Number *const number, int magnitude_delta) {
 		//prepend a '0.'
 		insert_at_first('.', number);
 		insert_at_first('0', number);
+		
+		//update place values of digits.
+		assign_place_value(number);
+
 		return s_success;
 	    }
 
@@ -391,7 +401,13 @@ Status modify_order_of_magnitude(Number *const number, int magnitude_delta) {
 		trav = trav->prev;
 
 	    //insert a decimal dot after trav.
-	    return insert_after('.', trav);
+	    insert_after('.', trav);
+
+	    //update place values of digits.
+	    assign_place_value(number);
+
+	    return s_success;
+
 	}
     }
 
@@ -429,6 +445,9 @@ Status modify_order_of_magnitude(Number *const number, int magnitude_delta) {
 	    trav = trav->prev;
 	}
     }
+
+    //update place values of digits.
+    assign_place_value(number);
 
     return s_success;
 }
@@ -511,7 +530,12 @@ int make_whole(Number *const number) {
 
     //multiply by powers of ten.
     modify_order_of_magnitude(number, factor);
+
+    //update place values of digits.
     assign_place_value(number);
+
+    //remove redundant zeros in the number.
+    sanitize(number);
 
     return factor;
 }
