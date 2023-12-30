@@ -6,6 +6,7 @@
 #include "subtract.h"
 #include "operation.h"
 #include "multiply.h"
+#include "divide.h"
 
 int main(int argc, char **argv) {
 
@@ -20,9 +21,7 @@ int main(int argc, char **argv) {
     Number num2 = get_number(argv[3]);
     //char operator = argv[2][0];
 
-    Number prod = multiply(&num1, &num2);
-    print_number(&prod);
-    printf("\n");
+    divide(&num1, &num2);
 
     release_memory();
 }
