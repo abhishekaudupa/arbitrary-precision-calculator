@@ -3,7 +3,7 @@
 
 #include "number.h"
 
-#define MAX_DIGIT_PRECISION 150
+#define MAX_DIGIT_PRECISION 200
 
 Number *divide(Number *const operand1, Number *const operand2);
 
