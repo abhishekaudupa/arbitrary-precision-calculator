@@ -2,11 +2,7 @@
 #include "argument.h"
 #include "number.h"
 #include "allocator.h"
-#include "add.h"
-#include "subtract.h"
 #include "operation.h"
-#include "multiply.h"
-#include "divide.h"
 
 int main(int argc, char **argv) {
 
@@ -16,12 +12,15 @@ int main(int argc, char **argv) {
 	return 1;
     }
 
-    //get numbers from arguments.
+    //get numbers and operator from arguments.
     Number num1 = get_number(argv[1]);
     Number num2 = get_number(argv[3]);
-    //char operator = argv[2][0];
+    char operator = argv[2][0];
 
-    divide(&num1, &num2);
+    //print the result of the operation.
+    print_number(resolve(&num1, &num2, operator));
+    printf("\n");
 
+    //free memory.
     release_memory();
 }

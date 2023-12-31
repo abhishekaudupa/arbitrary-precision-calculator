@@ -3,6 +3,6 @@
 
 #include "number.h"
 
-Number multiply(Number *const operand1, Number *const operand2);
+Number *multiply(Number *const operand1, Number *const operand2);
 
 #endif

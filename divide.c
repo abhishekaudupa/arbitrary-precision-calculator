@@ -3,16 +3,21 @@
 #include <stddef.h>
 #include "subtract.h"
 #include <stdio.h>
+#include "allocator.h"
 
 /*
    Function to divide operand1 by operand2.
  */
-Number divide(Number *const operand1, Number *const operand2) {
+Number *divide(Number *const operand1, Number *const operand2) {
     //design time check.
     assert(operand1 && operand2);
 
     //get a quotient variable.
-    Number quotient = { NULL, NULL, '+' };
+    Number *quotient = get_memory(sizeof(*quotient));
+
+    //init
+    quotient->head = quotient->tail = NULL;
+    quotient->sign = '+';
 
     /* We'll be dividing whole numbers only. For that we'll convert
        numbers with fractional parts to whole numbers by multiplying 
@@ -39,6 +44,8 @@ Number divide(Number *const operand1, Number *const operand2) {
 	++factor1;
     }
 
+    //now operand1 is exactly one order of magnitude bigger than operand2.
+
     //to store quotient during each division pass.
     char quotient_digit = 0;
 
@@ -52,10 +59,12 @@ Number divide(Number *const operand1, Number *const operand2) {
     }
 
     //build the quotient number's digit before decimal.
-    insert_at_last(quotient_digit + '0', &quotient);
+    insert_at_last(quotient_digit + '0', quotient);
 
     //update place values of digits.
-    assign_place_value(&quotient);
+    assign_place_value(quotient);
+
+    //operand1 is the remainder at this point.
 
     //decimal point generation, if necessary.
     if(!is_zero(operand1)) {
@@ -64,7 +73,7 @@ Number divide(Number *const operand1, Number *const operand2) {
 	}
     }
 
-    //continue subsequent divisions.
+    //continue subsequent divisions, if necessary.
     while(!is_zero(operand1) && quotient_factor < MAX_DIGIT_PRECISION) {
 	//divide.
 	quotient_digit = 0;
@@ -73,24 +82,26 @@ Number divide(Number *const operand1, Number *const operand2) {
 	    ++quotient_digit;
 	}
 
-	//build the quotient number's digit before decimal.
-	insert_at_last(quotient_digit + '0', &quotient);
+	//append the quotient digit to the quotient.
+	insert_at_last(quotient_digit + '0', quotient);
 
 	//update place values of digits.
-	assign_place_value(&quotient);
+	assign_place_value(quotient);
 
+	//multiply remainder by 10 if necessary.
 	if(abs_greater_than(operand2, operand1)) {
 	    modify_order_of_magnitude(operand1, 1);
 	    ++quotient_factor;
 	}
-
     }
 
     //adjust magnitude of the quotient.
-    modify_order_of_magnitude(&quotient, factor2 - factor1 - quotient_factor);
+    modify_order_of_magnitude(quotient, factor2 - factor1 - quotient_factor);
 
-    print_number(&quotient);
-    printf("\n");
+    //set the sign of the quotient.
+    if((operand1->sign == '+' && operand2->sign == '-')
+	    || (operand1->sign == '-' && operand2->sign == '+'))
+	quotient->sign = '-';
 
     return quotient;
 }

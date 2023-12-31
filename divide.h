@@ -5,6 +5,6 @@
 
 #define MAX_DIGIT_PRECISION 150
 
-Number divide(Number *const operand1, Number *const operand2);
+Number *divide(Number *const operand1, Number *const operand2);
 
 #endif

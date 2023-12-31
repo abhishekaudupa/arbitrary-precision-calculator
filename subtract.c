@@ -1,6 +1,9 @@
 #include "subtract.h"
 #include <assert.h>
 
+/*
+   Function to subtract operand2 from operand1 and return operand1.
+ */
 Number *subtract(Number *const operand1, Number *const operand2) {
 
     //design time check.

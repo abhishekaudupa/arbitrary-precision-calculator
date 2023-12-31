@@ -2,14 +2,19 @@
 #include "stddef.h"
 #include <assert.h>
 #include <stdio.h>
+#include "allocator.h"
 
-Number multiply(Number *const operand1, Number *const operand2) {
+Number *multiply(Number *const operand1, Number *const operand2) {
     //design time check
     assert(operand1 && operand2);
 
     //return variable.
-    Number product = { NULL, NULL, '+' };
+    Number *product = get_memory(sizeof(*product));
 
+    //init
+    product->head = product->tail = NULL;
+    product->sign = '+';
+    
     //get digit lengths
     unsigned int dl1 = get_digit_count(operand1);
     unsigned int dl2 = get_digit_count(operand2);
@@ -33,7 +38,7 @@ Number multiply(Number *const operand1, Number *const operand2) {
     unsigned char carry = 0;
 
     //traverser start position for product's digits (decremnted each iteration).
-    Digit_Node **trav3 = &(product.tail);
+    Digit_Node **trav3 = &(product->tail);
 
     //traverse each of trav2 digits.
     while(trav2) {
@@ -83,7 +88,7 @@ Number multiply(Number *const operand1, Number *const operand2) {
 		//shift trav_p left.
 		trav_p = trav_p->prev;
 	    } else {
-		insert_at_first(digit_prod + '0', &product);
+		insert_at_first(digit_prod + '0', product);
 	    }
 
 	    //shift trav1_r left.
@@ -92,7 +97,7 @@ Number multiply(Number *const operand1, Number *const operand2) {
 
 	//if there's a carry, prepend it.
 	if(carry) {
-	    insert_at_first(carry + '0', &product);
+	    insert_at_first(carry + '0', product);
 	    carry = 0;
 	}
 
@@ -104,7 +109,7 @@ Number multiply(Number *const operand1, Number *const operand2) {
     }
 
     //assign place values to digits of product.
-    assign_place_value(&product);
+    assign_place_value(product);
 
     /* we need to check if the operand/s were fractions and divide
        the product accordingly */
@@ -121,7 +126,12 @@ Number multiply(Number *const operand1, Number *const operand2) {
 	magnitude_delta += operand2->tail->distance_from_dot;
 
     //reduce order of magnitude of product.
-    modify_order_of_magnitude(&product, -magnitude_delta);
+    modify_order_of_magnitude(product, -magnitude_delta);
+
+    //set the sign of the product.
+    if((operand1->sign == '+' && operand2->sign == '-')
+	    || (operand1->sign == '-' && operand2->sign == '+'))
+	product->sign = '-';
 
     return product;
 }
